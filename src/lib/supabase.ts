@@ -43,7 +43,7 @@ export function transformDbRowToResumeData(row: any): Resume {
     experience: row.work_experience || [],
     education: row.education || [],
     skills: row.skills || [],
-    project: additionalSections.projects || [],
+    projects: additionalSections.projects || [],
     certifications: additionalSections.certifications || [],
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -64,7 +64,7 @@ export function transformResumeDataToDbRow(resumeData: Resume) {
     education: resumeData.education,
     skills: resumeData.skills,
     additional_sections: {
-      projects: resumeData.project || [],
+      projects: resumeData.projects || [],
       certifications: resumeData.certifications || [],
     },
   };
@@ -77,7 +77,7 @@ export interface Resume {
   personal_info: PersonalInfo;
   experience: Experience[];
   education: Education[];
-  project: Project[];
+  projects: Project[];
   skills: Skill[];
   certifications: Certification[];
   created_at: string;
@@ -118,8 +118,7 @@ export interface Education {
 export interface Skill {
   id: string;
   name: string;
-  category: "technical" | "soft" | "language" | "other";
-  proficiency: 1 | 2 | 3 | 4 | 5; // 1 = Beginner, 5 = Expert
+  
 }
 
 export interface Project {
