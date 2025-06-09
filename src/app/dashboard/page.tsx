@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Resume } from "@/lib/supabase";
 import Image from "next/image";
+import { ResumeCard } from "@/components/resume/ResumeCard";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -74,19 +75,18 @@ export default function Dashboard() {
       ) : (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {resumes.map((resume) => (
-            <Card key={resume.id}>
-              <CardHeader>
-                <CardTitle>{resume.title || "Untitled Resume"}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500 mb-4">
-                  Last updated: {new Date(resume.updated_at).toLocaleString()}
-                </p>
-                <Link href={`/dashboard/${resume.id}`}>
-                  <Button size="sm">Edit</Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <ResumeCard
+              key={resume.id}
+              resume={
+                {
+                  id: resume.id,
+                  full_name: resume.personal_info.full_name || "Untitled Resume",
+                  title: resume.title || "No Title",
+                  summary: resume.personal_info.summary || "No summary provided.",
+                  updated_at: resume.updated_at,
+                }
+              }
+            />
           ))}
         </div>
       )}

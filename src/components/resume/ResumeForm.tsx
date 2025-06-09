@@ -61,12 +61,20 @@ import {
   Target,
   Wrench,
 } from "lucide-react";
+import { ProfileInfoForm } from "./ProfileInfo";
+import { TitleForm } from "./Title";
 
 interface ValidationErrors {
   [key: string]: string;
 }
 
-export function ResumeForm() {
+interface ResumeFormProps {
+  mode: "create" | "edit";
+  initialData?: Resume;
+  resumeId?: string;
+}
+
+export function ResumeForm({ mode, initialData, resumeId }: ResumeFormProps) {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -566,147 +574,22 @@ export function ResumeForm() {
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Step 1: Resume Title */}
           {currentStep === 1 && (
-            <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-              <CardHeader className="pb-6">
-                <CardTitle className="flex items-center gap-3 text-2xl text-slate-800">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <FileText className="h-6 w-6 text-blue-600" />
-                  </div>
-                  Resume Title
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Give your resume a descriptive title that reflects your target
-                  role
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Input
-                    value={resume.title}
-                    onChange={(e) => {
-                      setResume({ ...resume, title: e.target.value });
-                      if (errors.title)
-                        setErrors((prev) => ({ ...prev, title: "" }));
-                    }}
-                    placeholder="e.g., Senior Software Engineer Resume"
-                    className={cn(
-                      "text-lg h-14 border-2 transition-all duration-200",
-                      errors.title
-                        ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                        : "border-slate-200 focus:border-blue-500 focus:ring-blue-500"
-                    )}
-                  />
-                  {errors.title && (
-                    <p className="text-red-600 text-sm flex items-center gap-1">
-                      <AlertCircle className="h-3 w-3" />
-                      {errors.title}
-                    </p>
-                  )}
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h4 className="font-medium text-blue-900 mb-2">
-                    💡 Pro Tips:
-                  </h4>
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Include your target job title</li>
-                    <li>• Be specific about your specialization</li>
-                    <li>• Keep it professional and clear</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Step 2: Personal Information */}
-          {currentStep === 1 && (
-            <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-              <CardHeader className="pb-6">
-                <CardTitle className="flex items-center gap-3 text-2xl text-slate-800">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <User className="h-6 w-6 text-green-600" />
-                  </div>
-                  Personal Information
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Your contact details and professional summary
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {personalInfoFields.map(
-                    ({
-                      key,
-                      label,
-                      icon: Icon,
-                      placeholder,
-                      type = "text",
-                      required,
-                    }) => (
-                      <div key={key} className="space-y-2">
-                        <Label
-                          htmlFor={key}
-                          className="text-sm font-medium text-slate-700 flex items-center gap-2"
-                        >
-                          <Icon className="h-4 w-4 text-slate-500" />
-                          {label}
-                          {required && <span className="text-red-500">*</span>}
-                        </Label>
-                        <Input
-                          id={key}
-                          type={type}
-                          value={
-                            resume.personal_info[
-                              key as keyof typeof resume.personal_info
-                            ]
-                          }
-                          onChange={(e) =>
-                            handleChange(
-                              key as keyof typeof resume.personal_info,
-                              e.target.value
-                            )
-                          }
-                          placeholder={placeholder}
-                          className={cn(
-                            "h-12 border-2 transition-all duration-200",
-                            errors[key]
-                              ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                              : "border-slate-200 focus:border-blue-500 focus:ring-blue-500"
-                          )}
-                        />
-                        {errors[key] && (
-                          <p className="text-red-600 text-sm flex items-center gap-1">
-                            <AlertCircle className="h-3 w-3" />
-                            {errors[key]}
-                          </p>
-                        )}
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <Separator className="my-8" />
-
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="summary"
-                    className="text-sm font-medium text-slate-700 flex items-center gap-2"
-                  >
-                    <Target className="h-4 w-4 text-slate-500" />
-                    Professional Summary
-                  </Label>
-                  <Textarea
-                    id="summary"
-                    value={resume.personal_info.summary}
-                    onChange={(e) => handleChange("summary", e.target.value)}
-                    placeholder="Write a compelling 2-3 sentence summary highlighting your key qualifications and career objectives..."
-                    className="min-h-[120px] border-2 border-slate-200 focus:border-blue-500 focus:ring-blue-500 resize-none text-base leading-relaxed"
-                  />
-                  <p className="text-xs text-slate-500">
-                    {resume.personal_info.summary.length}/300 characters
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white/90 backdrop-blur-sm rounded-lg">
+              <TitleForm
+                title={resume.title}
+                error={errors.title}
+                onChange={(val) => {
+                  setResume({ ...resume, title: val });
+                  if (errors.title)
+                    setErrors((prev) => ({ ...prev, title: "" }));
+                }}
+              />
+              <ProfileInfoForm
+                personalInfo={resume.personal_info}
+                onChange={handleChange}
+                errors={errors}
+              />
+            </div>
           )}
 
           {/* Step 2: Experience */}

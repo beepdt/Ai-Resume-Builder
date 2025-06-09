@@ -24,7 +24,7 @@ export default function NewResumePage() {
   }
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <ResumeForm />
+      <ResumeForm mode="create" />
     </div>
   );
 }
