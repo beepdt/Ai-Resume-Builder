@@ -19,11 +19,12 @@ export const ResumeCard = ({ resume }: ResumeCardProps) => {
   const router = useRouter();
 
   const handleEdit = () => {
+    console.log("Editing resume:", resume.id);
     router.push(`/dashboard/${resume.id}`); // Will load ResumeForm in edit mode
   };
 
   const handleView = () => {
-    router.push(`/resume/view/${resume.id}`); // Public view (optional)
+    router.push(`/dashboard/view/${resume.id}`); // Public view (optional)
   };
 
   const formattedDate = resume.updated_at
@@ -43,7 +44,9 @@ export const ResumeCard = ({ resume }: ResumeCardProps) => {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {resume.title && <p className="text-sm text-gray-600">{resume.title}</p>}
+        {resume.title && (
+          <p className="text-sm text-gray-600">{resume.title}</p>
+        )}
 
         <p className="text-sm text-gray-500 line-clamp-3">
           {resume.summary || "No summary provided."}
@@ -54,10 +57,15 @@ export const ResumeCard = ({ resume }: ResumeCardProps) => {
         )}
 
         <div className="flex justify-between items-center mt-4">
-          <Button onClick={handleEdit} variant="outline" className="text-sm">
-            <Pencil className="w-4 h-4 mr-2" /> Edit
+          <Button onClick={handleEdit} type="button" variant="outline" className="text-sm">
+            <Pencil className="w-4 h-4 mr-2" />
+             Edit
           </Button>
-          <Button onClick={handleView} variant="ghost" className="text-sm text-blue-600 hover:underline">
+          <Button
+            onClick={handleView}
+            variant="ghost"
+            className="text-sm text-blue-600 hover:underline"
+          >
             <ExternalLink className="w-4 h-4 mr-1" />
             View
           </Button>

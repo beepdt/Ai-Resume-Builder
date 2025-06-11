@@ -145,8 +145,6 @@ export function ResumeForm({ mode, initialData, resumeId }: ResumeFormProps) {
         if (!resume.title.trim()) {
           newErrors.title = "Resume title is required";
         }
-        break;
-      case 1:
         if (!resume.personal_info.full_name.trim()) {
           newErrors.full_name = "Full name is required";
         }
@@ -168,36 +166,6 @@ export function ResumeForm({ mode, initialData, resumeId }: ResumeFormProps) {
   };
 
   // Auto-save functionality
-  useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      if (resume.title.trim()) {
-        setAutosaveStatus("saving");
-        try {
-          localStorage.setItem("resumeDraft", JSON.stringify(resume));
-          setAutosaveStatus("saved");
-          setTimeout(() => setAutosaveStatus(null), 2000);
-        } catch (error) {
-          setAutosaveStatus("error");
-          setTimeout(() => setAutosaveStatus(null), 3000);
-        }
-      }
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [resume]);
-
-  // Load draft from localStorage on mount
-  useEffect(() => {
-    const draft = localStorage.getItem("resumeDraft");
-    if (draft) {
-      try {
-        const parsedDraft = JSON.parse(draft);
-        setResume(parsedDraft);
-      } catch (error) {
-        console.error("Error loading draft:", error);
-      }
-    }
-  }, []);
 
   const handleChange = (
     field: keyof typeof resume.personal_info,
@@ -484,52 +452,13 @@ export function ResumeForm({ mode, initialData, resumeId }: ResumeFormProps) {
     return (currentStep / totalSteps) * 100;
   };
 
-  const personalInfoFields = [
-    {
-      key: "full_name",
-      label: "Full Name",
-      icon: User,
-      placeholder: "John Doe",
-      required: true,
-    },
-    {
-      key: "email",
-      label: "Email",
-      icon: Mail,
-      placeholder: "john@example.com",
-      type: "email",
-      required: true,
-    },
-    {
-      key: "phone",
-      label: "Phone",
-      icon: Phone,
-      placeholder: "+91 555 123-4567",
-      type: "tel",
-      required: true,
-    },
-    {
-      key: "location",
-      label: "Location",
-      icon: MapPin,
-      placeholder: "New York, NY",
-    },
-    {
-      key: "linkedin",
-      label: "LinkedIn",
-      icon: Linkedin,
-      placeholder: "linkedin.com/in/johndoe",
-    },
-    {
-      key: "websiteUrl",
-      label: "Website",
-      icon: Globe,
-      placeholder: "johndoe.com",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 py-4 px-4 rounded-xl">
+      <div>
+        <X 
+        onClick={() => router.back()}
+        className="text-slate-400 md:size-10 rounded-full max-size-12 cursor-pointer transition-colors duration-300 hover:text-gray-800"/>
+      </div>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -1621,31 +1550,7 @@ export function ResumeForm({ mode, initialData, resumeId }: ResumeFormProps) {
           </div>
 
           {/* Quick Actions */}
-          <div className="flex justify-center gap-4 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setSaving(true)}
-              disabled={saving}
-              className="h-10 px-4 border-dashed"
-            >
-              {saving ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Save className="h-4 w-4 mr-2" />
-              )}
-              Save Draft
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setShowPreview(!showPreview)}
-              className="h-10 px-4"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              {showPreview ? "Hide" : "Preview"}
-            </Button>
-          </div>
+          
 
           {/* Error Display */}
           {Object.keys(errors).length > 0 && (
