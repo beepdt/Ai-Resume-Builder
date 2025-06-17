@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Experience,
@@ -9,7 +10,7 @@ import {
 } from "@/lib/supabase";
 import { getResumeById } from "@/lib/supabase_crud";
 import { Mail, Linkedin, Github, Phone } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 type Props = {
@@ -18,8 +19,8 @@ type Props = {
 interface ValidationErrors {
   [key: string]: string;
 }
-export default function ResumeView({ params }: Props) {
-  const id = params.id;
+export default function ResumeView() {
+  const {id} = useParams();
   const { user } = useAuth();
   const router = useRouter();
 
@@ -73,6 +74,10 @@ export default function ResumeView({ params }: Props) {
   });
 
   const [loading, setLoading] = useState(true);
+
+  const exportPDF = () => {
+     router.push(`/dashboard/view/export/${resume.id}`);
+  }
 
   useEffect(() => {
     if (id) {
@@ -326,6 +331,11 @@ export default function ResumeView({ params }: Props) {
           ))}
         </div>
       )}
+      <div className="px-56">
+        <Button 
+        onClick={()=> exportPDF()}
+        className="w-full">Export PDF</Button>
+      </div>
     </div>
   );
 }

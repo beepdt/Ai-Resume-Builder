@@ -491,7 +491,7 @@ export default function EditResumePage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 py-4 px-4 rounded-xl max-w-4xl">
+      <div className="min-h-screen bg-white py-4 px-4 rounded-xl max-w-4xl">
         <div>
           <X
             onClick={() => router.back()}
@@ -1561,7 +1561,30 @@ export default function EditResumePage({ params }: Props) {
                 ))}
               </div>
 
-              {currentStep < totalSteps ? (
+              <Button
+                type="submit"
+                disabled={
+                  loading ||
+                  !resume.title.trim() ||
+                  !resume.personal_info.full_name ||
+                  !resume.personal_info.email
+                }
+                className="h-12 px-8 rounded-xl bg-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Saving Resume...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5 mr-2" />
+                    Save Resume
+                  </>
+                )}
+              </Button>
+
+              {currentStep < totalSteps && (
                 <Button
                   type="button"
                   onClick={next}
@@ -1570,34 +1593,9 @@ export default function EditResumePage({ params }: Props) {
                   Next
                   <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  disabled={
-                    loading ||
-                    !resume.title.trim() ||
-                    !resume.personal_info.full_name ||
-                    !resume.personal_info.email
-                  }
-                  className="h-12 px-8 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                      Saving Resume...
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-5 w-5 mr-2" />
-                      Save Resume
-                    </>
-                  )}
-                </Button>
               )}
+              
             </div>
-
-           
-            
 
             {/* Error Display */}
             {Object.keys(errors).length > 0 && (

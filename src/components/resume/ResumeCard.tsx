@@ -36,21 +36,18 @@ export const ResumeCard = ({ resume }: ResumeCardProps) => {
     : "";
 
   return (
-    <Card className="bg-white shadow-sm border border-gray-200">
+    <Card className="bg-white rounded-[36px] shadow-sm border border-gray-200 pl-4 pb-8">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-gray-800">
-          {resume.full_name || "Untitled Resume"}
+          {resume.title || "Untitled Resume"}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-3">
         {resume.title && (
-          <p className="text-sm text-gray-600">{resume.title}</p>
+          <p className="text-md text-gray-800">{resume.full_name}</p>
         )}
 
-        <p className="text-sm text-gray-500 line-clamp-3">
-          {resume.summary || "No summary provided."}
-        </p>
 
         {formattedDate && (
           <p className="text-xs text-gray-400">Last updated: {formattedDate}</p>

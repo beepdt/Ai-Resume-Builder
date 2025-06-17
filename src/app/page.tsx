@@ -3,11 +3,13 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import "./globals.css"
 import { Card } from "@/components/ui/card";
+import image from "./../../public/Frame 1.svg"
 export default function HomePage() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#F4FAFF] text-black">
+    <div className="min-h-screen ">
+      <img src="/Frame 1.svg" alt="Frame" className="absolute inset-0 w-full h-full object-cover -z-10" />
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
           <h1 className="text-5xl font-bold  mb-6">
